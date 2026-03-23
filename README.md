@@ -458,7 +458,7 @@ cp -r marketing/*.md ~/.claude/agents/
 
 ## 工具集成
 
-支持 **12 种主流 AI 编程工具**，通过 `scripts/` 目录下的脚本实现格式转换和一键安装。
+支持 **14 种主流 AI 编程工具**，通过 `scripts/` 目录下的脚本实现格式转换和一键安装。
 
 ### 支持的工具
 
@@ -466,6 +466,7 @@ cp -r marketing/*.md ~/.claude/agents/
 |------|----------|------|
 | **Claude Code** | `~/.claude/agents/` | 全局，直接复制 |
 | **GitHub Copilot** | `~/.github/agents/` + `~/.copilot/agents/` | 全局，直接复制 |
+| **Kiro** (Amazon) | `~/.kiro/agents/` | 全局，需转换 |
 | **OpenClaw** | `~/.openclaw/agency-agents/` | 全局，需转换 |
 | **Antigravity** | `~/.gemini/antigravity/skills/` | 全局，需转换 |
 | **Gemini CLI** | `~/.gemini/extensions/agency-agents/` | 全局，需转换 |
@@ -476,6 +477,7 @@ cp -r marketing/*.md ~/.claude/agents/
 | **Aider** | `CONVENTIONS.md` | 项目级，需转换 |
 | **Windsurf** | `.windsurfrules` | 项目级，需转换 |
 | **Codex CLI** | `.codex/agents/` | 项目级，需转换 |
+| **DeerFlow 2.0** (字节跳动) | `skills/custom/` | 项目级，需转换 |
 
 ### 使用方法
 
@@ -695,6 +697,46 @@ cd /your/project
 ```
 
 在 Codex 中使用时，智能体会作为 subagent 被调用。也可以在 `AGENTS.md` 中引用。
+</details>
+
+<details>
+<summary><strong>Kiro (Amazon)</strong></summary>
+
+Amazon 的 Spec 驱动 AI IDE，基于 Claude 模型。每个智能体转换为 JSON 配置 + 提示词文件，安装到 `~/.kiro/agents/`（全局）。
+
+```bash
+./scripts/convert.sh --tool kiro
+./scripts/install.sh --tool kiro
+```
+
+在 Kiro 中切换智能体：
+```
+/agent swap
+```
+
+或启动时直接指定：
+```bash
+kiro-cli --agent engineering-frontend-developer
+```
+</details>
+
+<details>
+<summary><strong>DeerFlow 2.0 (字节跳动)</strong></summary>
+
+字节跳动的开源 SuperAgent 框架，支持子代理、沙箱、持久记忆。每个智能体转换为 `SKILL.md` 技能文件。
+
+```bash
+./scripts/convert.sh --tool deerflow
+./scripts/install.sh --tool deerflow
+```
+
+默认安装到当前目录的 `skills/custom/`。可通过环境变量自定义路径：
+
+```bash
+DEERFLOW_SKILLS_DIR=/path/to/deerflow/skills/custom ./scripts/install.sh --tool deerflow
+```
+
+安装后在 DeerFlow 的任务中，相关技能会自动加载。
 </details>
 
 ### 修改智能体后重新生成
